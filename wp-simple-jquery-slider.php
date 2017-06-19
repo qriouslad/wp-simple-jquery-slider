@@ -76,3 +76,37 @@ return '<div class="container">
 	</div>';
 
 }
+
+
+add_action('init', 'wpsjs_register_slider_cpt');
+function wpsjs_register_slider_cpt() {
+
+	$labels = array(
+
+		'menu_name' => _x('Sliders', 'slidersjs_slider'),
+
+	);
+
+	$args = array(
+
+		'labels' => $labels,
+		'hierarchical' => true,
+		'description' => 'Slideshows',
+		'supports' => array('title','editor'),
+		'public' => true,
+		'show_ui' => true,
+		'show_in_menu' => true,
+		'show_in_nav_menus' => true,
+		'publicly_queryable' => true,
+		'exclude_from_search' => false,
+		'has_archive' => true,
+		'query_var' => true,
+		'can_export' => true,
+		'rewrite' => true,
+		'capability_type' => 'post'
+
+	);
+
+	register_post_type('slidesjs_slider', $args);
+
+}
