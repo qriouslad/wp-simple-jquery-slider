@@ -41,6 +41,18 @@ function wpsjs_scripts() {
 	wp_register_script('slidesjs_init', plugins_url('js/slidesjs.initialize.js', __FILE__));
 	wp_enqueue_script('slidesjs_init');
 
+	$effect = (get_option('wpsjs_effect') == '') ? 'slide' : get_option('wpsjs_effect');
+	$interval = (get_option('wpsjs_interval') == '') ? 2000 : get_option('wpsjs_interval');
+	$autoplay = (get_option('wpsjs_autoplay') == 'enabled') ? true : false;
+	$playBtn = (get_option('wpsjs_playBtn') == 'enabled') ? true : false;
+	$config_array = array(
+		'effect' => $effect,
+		'interval' => $interval,
+		'autoplay' => $autoplay,
+		'playBtn' => $playBtn
+	);
+
+	wp_localize_script('slidesjs_init', 'setting', $config_array);
 }
 
 
@@ -251,5 +263,72 @@ function wpsjs_display_slider($attr,$content) {
 	';
 
 	return $html;
+
+}
+
+
+add_action('admin_menu', 'wpsjs_plugin_settings');
+function wpsjs_plugin_settings() {
+
+	add_menu_page('WP Simple jQuery Slider Settings', 'WPSJS Slider', 'administrator', 'wpsjs_settings', 'wpsjs_display_settings');
+
+}
+
+function wpsjs_display_settings() {
+
+	$slide_effect = (get_option('wpsjs_effect') == 'slide') ? 'selected' : '';
+
+	$fade_effect = (get_option('wpsjs_effect') == 'fade') ? 'selected' : '';
+
+	$interval = (get_option('wpsjs_interval') != '') ? get_option('wpsjs_interval') : '2000';
+
+	$autoplay = (get_option('wpsjs_autoplay') == 'enabled') ? 'checked' : '';
+
+	$playBtn = (get_option('wpsjs_playBtn') == 'enabled') ? 'checked' : '';
+
+	$html = '<div class="wrap">
+	<form action="options.php" method="post" name="options">
+	<h2>Select Your Settings</h2>
+	' . wp_nonce_field('update-options') . '
+	<table class="form-table" width="100%" cellpadding="10">
+		<tbody>
+			<tr>
+				<td scope="row" align="left">
+				<label>Slider Effect</label>
+				<select name="wpsjs_effect">
+					<option value="slide" ' . $slide_effect . '>Slide</option>
+					<option value="fade" ' . $fade_effect . '>Fade</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td scope="row" align="left">
+				<label>Enable Auto Play</label>
+				<input type="checkbox" ' . $autoplay . ' name="wpsjs_autoplay" value="enabled" />
+				</td>
+			</tr>
+			<tr>
+				<td scope="row" align="left">
+				<label>Enable Play Button</label>
+				<input type="checkbox" ' . $playBtn . ' name="wpsjs_playBtn" value="enabled" />
+				</td>
+			</tr>
+			<tr>
+				<td scope="row" align="left">
+				<label>Transition Interval</label>
+				<input type="text" name="wpsjs_interval" value="' . $interval . '" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<p class="submit">
+		<input type="hidden" name="action" value="update" />
+		<input type="hidden" name="page_options" value="wpsjs_autoplay,wpsjs_effect,wpsjs_interval,wpsjs_playBtn" />
+		<input type="submit" name="Submit" value="Update" />
+	</p>
+	</form>
+	</div>';
+
+	echo $html;
 
 }
