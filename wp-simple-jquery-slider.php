@@ -50,7 +50,29 @@ function wpsjs_styles() {
 	wp_register_style('slidesjs_example', plugins_url('css/example.css', __FILE__));
 	wp_enqueue_style('slidesjs_example');
 
+	wp_register_style('slidesjs_styles', plugins_url('css/styles.css', __FILE__));
+	wp_enqueue_style('slidesjs_styles');
+
 	wp_register_style('slidesjs_fonts', plugins_url('css/font-awesome.min.css', __FILE__));
 	wp_enqueue_style('slidesjs_fonts');
+
+}
+
+
+add_shortcode('wpsjs_slider', 'wpsjs_display_slider');
+function wpsjs_display_slider() {
+
+$plugins_url = plugins_url();
+
+return '<div class="container">
+		<div id="slides">
+			<img src="' . plugins_url('img/example-slide-1.jpg', __FILE__) .  '" />
+			<img src="' . plugins_url('img/example-slide-2.jpg', __FILE__) .  '" />
+			<img src="' . plugins_url('img/example-slide-3.jpg', __FILE__) .  '" />
+			<img src="' . plugins_url('img/example-slide-4.jpg', __FILE__) .  '" />
+			<a href="#" class="slidesjs-previous slidesjs-navigation"><i class="icon-chevron-left icon-large"></i></a>
+			<a href="#" class="slidesjs-next slidesjs-navigation"><i class="icon-chevron-right icon-large"></i></a>
+		</div>
+	</div>';
 
 }
